@@ -2,13 +2,13 @@ package fizzbuzz
 
 import (
 	"net/http"
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
+	"lbc/fizzbuzz/internal/db"
 	"lbc/fizzbuzz/internal/dbmodels"
+	"lbc/fizzbuzz/internal/utils"
 )
 
 func GetResult(c *gin.Context) {
@@ -16,26 +16,27 @@ func GetResult(c *gin.Context) {
 	var fizzbuzz dbmodels.Fizzbuzz
 	c.ShouldBindJSON(&fizzbuzz)
 
-	var sb strings.Builder
-
-	for i := 1; i <= fizzbuzz.Limit; i++ {
-		if i%(fizzbuzz.Int1*fizzbuzz.Int2) == 0 {
-			sb.WriteString(fizzbuzz.Str1)
-			sb.WriteString(fizzbuzz.Str2)
-			sb.WriteString(",")
-			continue
-		} else if i%int(fizzbuzz.Int1) == 0 {
-			sb.WriteString(fizzbuzz.Str1)
-			sb.WriteString(",")
-			continue
-		} else if i%int(fizzbuzz.Int2) == 0 {
-			sb.WriteString(fizzbuzz.Str2)
-			sb.WriteString(",")
-			continue
-		}
-		sb.WriteString(strconv.FormatInt(int64(i), 10))
-		sb.WriteString(",")
+	dbc := db.NewDBConn()
+	_, err := dbc.Model(&fizzbuzz).Insert()
+	if err != nil {
+		log.Errorf("Could not create new annonce, err %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "Could not create new annonce"})
+		return
 	}
 
-	c.JSON(http.StatusOK, sb.String()[:len(sb.String())-1])
+	c.JSON(http.StatusOK, utils.BuildFizzBuzzString(fizzbuzz))
+}
+
+func GetStats(c *gin.Context) {
+	log.Info("Hitting Get Stats")
+	dbc := db.NewDBConn()
+
+	jsonData, err := db.GetStats(dbc)
+	if err != nil {
+		log.Error("Could not get stats, err %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "Could not get stats"})
+		return
+	}
+
+	c.Data(http.StatusOK, "application/json", jsonData)
 }
