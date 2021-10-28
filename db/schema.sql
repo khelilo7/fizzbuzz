@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS lbc_db;
+DROP DATABASE IF EXISTS api_stats;
 
-CREATE DATABASE lbc_db;
+CREATE DATABASE api_stats;
 
-\c lbc_db
+\c api_stats
 
 CREATE TABLE request (
     id  BIGSERIAL PRIMARY KEY NOT NULL,

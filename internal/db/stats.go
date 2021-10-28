@@ -12,60 +12,60 @@ import (
 func GetStats(dbc *pg.DB) ([]byte, error) {
 	req, err := AggReqCount(dbc)
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 	int1, err := AggFieldCount(dbc, "int1")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	int2, err := AggFieldCount(dbc, "int2")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	int12, err := AggFieldCount(dbc, "int1", "int2")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	limit, err := AggFieldCount(dbc, "limite")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	str1, err := AggFieldCount(dbc, "str1")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	str2, err := AggFieldCount(dbc, "str2")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	str12, err := AggFieldCount(dbc, "str1", "str2")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	strInt1, err := AggFieldCount(dbc, "str1", "int1")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 
 	strInt2, err := AggFieldCount(dbc, "str2", "int2")
 	if err != nil {
-		log.Error("Could not query requests, err %v", err)
+		log.Errorf("Could not query requests, err %v", err)
 		return nil, err
 	}
 

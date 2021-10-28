@@ -15,6 +15,7 @@ func GetResult(c *gin.Context) {
 	log.Info("Hitting Get Result")
 	var fizzbuzz dbmodels.Fizzbuzz
 	c.ShouldBindJSON(&fizzbuzz)
+	// TODO add validation
 
 	dbc := db.NewDBConn()
 	_, err := dbc.Model(&fizzbuzz).Insert()
@@ -33,7 +34,7 @@ func GetStats(c *gin.Context) {
 
 	jsonData, err := db.GetStats(dbc)
 	if err != nil {
-		log.Error("Could not get stats, err %v", err)
+		log.Errorf("Could not get stats, err %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "Could not get stats"})
 		return
 	}
