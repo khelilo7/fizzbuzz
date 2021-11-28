@@ -9,7 +9,7 @@ import (
 	"lbc/fizzbuzz/internal/dbmodels"
 )
 
-func GetStats(dbc *pg.DB) ([]byte, error) {
+var GetStats = func(dbc *pg.DB) ([]byte, error) {
 	req, err := AggReqCount(dbc)
 	if err != nil {
 		log.Errorf("Could not query requests, err %v", err)

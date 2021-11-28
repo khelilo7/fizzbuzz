@@ -14,11 +14,15 @@ import (
 func GetResult(c *gin.Context) {
 	log.Info("Hitting Get Result")
 	var fizzbuzz dbmodels.Fizzbuzz
-	c.ShouldBindJSON(&fizzbuzz)
-	// TODO add validation
+	err := c.ShouldBindJSON(&fizzbuzz)
+	if err != nil {
+		log.Errorf("%v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"status": "Bad input"})
+		return
+	}
 
 	dbc := db.NewDBConn()
-	_, err := dbc.Model(&fizzbuzz).Insert()
+	_, err = dbc.Model(&fizzbuzz).Insert()
 	if err != nil {
 		log.Errorf("Could not create new annonce, err %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "Could not create new annonce"})
